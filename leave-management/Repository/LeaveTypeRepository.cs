@@ -42,6 +42,11 @@ namespace leave_management.Repository
             throw new NotImplementedException();
         }
 
+        public bool IsExists(int id)
+        {
+            return _dp.LeaveTypes.FirstOrDefault(i=> i.Id==id)!=null;
+        }
+
         public bool Save()
         {
             return _dp.SaveChanges()> 0;
