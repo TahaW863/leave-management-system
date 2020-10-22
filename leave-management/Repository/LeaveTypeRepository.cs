@@ -1,5 +1,6 @@
 ﻿using leave_management.Contracts;
 using leave_management.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,47 +16,44 @@ namespace leave_management.Repository
         {
             _dp = dp;
         }
-        public bool Create(LeaveType entity)
+        public async Task<bool> Create(LeaveType entity)
         {
-            _dp.LeaveTypes.Add(entity);
-            return Save();
+            await _dp.LeaveTypes.AddAsync(entity);
+            return await Save();
         }
 
-        public bool Delete(LeaveType entity)
+        public async Task<bool> Delete(LeaveType entity)
         {
             _dp.LeaveTypes.Remove(entity);
-            return Save();
+            return await Save();
         }
 
-        public ICollection<LeaveType> FindAll()
+        public async Task<ICollection<LeaveType>> FindAll()
         {
-            return _dp.LeaveTypes.ToList();
+            return await _dp.LeaveTypes.ToListAsync();
         }
 
-        public LeaveType FindById(int id)
+        public async Task<LeaveType> FindById(int id)
         {
-            return _dp.LeaveTypes.Find(id);
+            return await _dp.LeaveTypes.FindAsync(id);
         }
 
-        public ICollection<LeaveType> GetEmployeesByLeaveType(int id)
+        
+
+        public async Task<bool> IsExists(int id)
         {
-            throw new NotImplementedException();
+            return await _dp.LeaveTypes.AnyAsync(i=> i.Id==id);
         }
 
-        public bool IsExists(int id)
+        public async Task<bool> Save()
         {
-            return _dp.LeaveTypes.FirstOrDefault(i=> i.Id==id)!=null;
+            return await _dp.SaveChangesAsync()> 0;
         }
 
-        public bool Save()
-        {
-            return _dp.SaveChanges()> 0;
-        }
-
-        public bool Update(LeaveType entity)
+        public async Task<bool> Update(LeaveType entity)
         {
             _dp.LeaveTypes.Update(entity);
-            return Save();
+            return await Save();
         }
     }
 }
